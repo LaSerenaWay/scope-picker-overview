@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scope Picker — Overview</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap');
+
+  :root {
+    --accent: #5b5ef4;
+    --accent2: #a855f7;
+    --accent3: #06b6d4;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --rose: #f43f5e;
+    --glass-bg: rgba(255,255,255,0.10);
+    --glass-border: rgba(255,255,255,0.20);
+    --glass-hover: rgba(255,255,255,0.16);
+    --text: #f0f4ff;
+    --text-muted: rgba(240,244,255,0.65);
+    --text-dim: rgba(240,244,255,0.40);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0b0e1a;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Animated gradient background ── */
+  .bg-orbs {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  .orb {
+    position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.35;
+    animation: drift 18s ease-in-out infinite alternate;
+  }
+  .orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, #5b5ef4, transparent); top: -150px; left: -100px; animation-delay: 0s; }
+  .orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, #a855f7, transparent); top: 30%; right: -100px; animation-delay: -5s; }
+  .orb-3 { width: 450px; height: 450px; background: radial-gradient(circle, #06b6d4, transparent); bottom: -80px; left: 30%; animation-delay: -10s; }
+  .orb-4 { width: 300px; height: 300px; background: radial-gradient(circle, #10b981, transparent); bottom: 20%; left: -50px; animation-delay: -3s; opacity: 0.20; }
+  @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(30px, 40px) scale(1.08); } }
+
+  /* ── Layout ── */
+  .page { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; padding: 60px 28px 100px; }
+
+  /* ── Glass card ── */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+  }
+  .glass-sm { border-radius: 14px; }
+
+  /* ── Hero ── */
+  .hero { text-align: center; padding: 64px 40px 56px; margin-bottom: 48px; position: relative; overflow: hidden; }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(91,94,244,0.18) 0%, rgba(168,85,247,0.12) 50%, rgba(6,182,212,0.10) 100%);
+    border-radius: inherit;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(91,94,244,0.22); border: 1px solid rgba(91,94,244,0.45);
+    border-radius: 99px; padding: 6px 16px; font-size: 12px; font-weight: 500;
+    color: #a5b4fc; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 24px;
+  }
+  .hero-tag .dot-pulse {
+    width: 7px; height: 7px; border-radius: 50%; background: #818cf8;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.85)} }
+  .hero h1 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(36px, 5vw, 58px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 40%, #a5b4fc 70%, #818cf8 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 20px;
+  }
+  .hero-sub {
+    font-size: 18px; color: var(--text-muted); max-width: 680px; margin: 0 auto 32px;
+    line-height: 1.6; font-weight: 400;
+  }
+  .hero-badges { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 99px; padding: 7px 16px; font-size: 13px; font-weight: 500; color: var(--text-muted);
+  }
+  .badge svg { opacity: 0.7; }
+
+  /* ── Section headings ── */
+  .section-label {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 18px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.10); }
+  h2 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 26px; font-weight: 600; margin-bottom: 8px; color: var(--text);
+  }
+  .section-intro { color: var(--text-muted); font-size: 15px; line-height: 1.65; margin-bottom: 28px; }
+
+  /* ── Two-col grid ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  @media (max-width: 860px) { .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+  @media (max-width: 1060px) { .grid-4 { grid-template-columns: 1fr 1fr; } }
+
+  /* ── Info cards ── */
+  .card { padding: 24px 26px; }
+  .card-icon {
+    width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+    margin-bottom: 16px; font-size: 20px;
+  }
+  .card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+  .card ul { list-style: none; padding: 0; }
+  .card ul li { font-size: 14px; color: var(--text-muted); line-height: 1.6; padding: 4px 0; display: flex; gap: 8px; }
+  .card ul li::before { content: '›'; color: var(--accent); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── Steps ── */
+  .steps-flow { display: flex; flex-direction: column; gap: 0; }
+  .step-item {
+    display: grid; grid-template-columns: 56px 1fr; gap: 0; position: relative;
+  }
+  .step-left { display: flex; flex-direction: column; align-items: center; }
+  .step-num-circle {
+    width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+    font-weight: 700; font-size: 16px; font-family: 'DM Sans', sans-serif;
+    flex-shrink: 0; position: relative; z-index: 1;
+  }
+  .step-connector {
+    width: 2px; flex: 1; margin: 4px auto; min-height: 24px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+  }
+  .step-item:last-child .step-connector { display: none; }
+  .step-body {
+    padding: 0 0 32px 20px;
+  }
+  .step-body-inner {
+    padding: 22px 24px;
+  }
+  .step-title { font-size: 18px; font-weight: 600; margin-bottom: 4px; font-family: 'DM Sans', sans-serif; }
+  .step-subtitle { font-size: 13px; color: var(--text-dim); margin-bottom: 14px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; }
+  .step-desc { font-size: 14px; color: var(--text-muted); line-height: 1.65; margin-bottom: 14px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .tag {
+    font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 99px;
+    border: 1px solid; white-space: nowrap;
+  }
+  .tag-prod { color: #fdba74; border-color: rgba(251,146,60,0.4); background: rgba(251,146,60,0.10); }
+  .tag-seg  { color: #f9a8d4; border-color: rgba(236,72,153,0.4); background: rgba(236,72,153,0.10); }
+  .tag-chan { color: #a5b4fc; border-color: rgba(99,102,241,0.4); background: rgba(99,102,241,0.10); }
+  .tag-app  { color: #67e8f9; border-color: rgba(6,182,212,0.4); background: rgba(6,182,212,0.10); }
+  .tag-new  { color: #f0abfc; border-color: rgba(192,38,211,0.4); background: rgba(192,38,211,0.10); }
+  .tag-core { color: #6ee7b7; border-color: rgba(16,185,129,0.4); background: rgba(16,185,129,0.10); }
+  .tag-cond { color: #fde68a; border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.10); }
+  .tag-out  { color: #bfdbfe; border-color: rgba(59,130,246,0.4); background: rgba(59,130,246,0.10); }
+
+  /* ── Sub-tabs inside step 3 ── */
+  .subtabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  @media (max-width: 700px) { .subtabs { grid-template-columns: 1fr; } }
+  .subtab {
+    padding: 16px 18px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+  }
+  .subtab-icon { font-size: 22px; margin-bottom: 8px; }
+  .subtab h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .subtab p { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+
+  /* ── IO flow ── */
+  .io-flow {
+    display: flex; align-items: center; gap: 0; padding: 32px 36px;
+    flex-wrap: wrap; justify-content: center;
+  }
+  .io-node {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    padding: 18px 20px; gap: 10px; min-width: 130px;
+  }
+  .io-icon {
+    width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+  .io-label { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .io-meta { font-size: 11.5px; color: var(--text-dim); line-height: 1.4; }
+  .io-arrow {
+    font-size: 22px; color: var(--text-dim); padding: 0 8px; flex-shrink: 0;
+    display: flex; align-items: center;
+  }
+  @media (max-width: 700px) { .io-arrow { transform: rotate(90deg); } }
+
+  /* ── Output section ── */
+  .output-block { padding: 28px 30px; }
+  .output-title { font-size: 15px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .output-rows { display: flex; flex-direction: column; gap: 10px; }
+  .output-row {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.05); border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .output-row-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .output-row-label { font-size: 13.5px; font-weight: 600; margin-bottom: 3px; }
+  .output-row-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ── Files table ── */
+  .files-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .files-grid { grid-template-columns: 1fr; } }
+  .file-card {
+    padding: 18px 20px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); border-radius: 14px;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .file-icon { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+  .file-name { font-size: 13px; font-weight: 600; font-family: 'DM Mono', monospace; color: #c7d2fe; margin-bottom: 4px; }
+  .file-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+  .file-role { font-size: 11px; font-weight: 500; margin-top: 6px; padding: 3px 10px; border-radius: 99px; display: inline-block; }
+  .role-input { background: rgba(6,182,212,0.12); color: #67e8f9; border: 1px solid rgba(6,182,212,0.25); }
+  .role-tool  { background: rgba(91,94,244,0.12); color: #a5b4fc; border: 1px solid rgba(91,94,244,0.25); }
+  .role-output{ background: rgba(16,185,129,0.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.25); }
+  .role-apply { background: rgba(245,158,11,0.12); color: #fde68a; border: 1px solid rgba(245,158,11,0.25); }
+
+  /* ── New objects authoring ── */
+  .author-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (max-width: 700px) { .author-grid { grid-template-columns: 1fr; } }
+  .author-card {
+    padding: 18px 20px;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); border-radius: 14px;
+  }
+  .author-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .author-card p { font-size: 13px; color: var(--text-muted); line-height: 1.55; }
+
+  /* ── Status banner ── */
+  .status-banner {
+    display: flex; align-items: center; gap: 14px;
+    padding: 18px 24px; border-radius: 14px; margin-bottom: 40px;
+    background: rgba(245,158,11,0.10); border: 1px solid rgba(245,158,11,0.25);
+  }
+  .status-banner .sbi { font-size: 22px; flex-shrink: 0; }
+  .status-banner p { font-size: 14px; color: #fde68a; line-height: 1.55; }
+  .status-banner strong { color: #fbbf24; }
+
+  /* ── Next steps ── */
+  .next-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .next-list li {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 14px 16px; background: rgba(255,255,255,0.05); border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08); font-size: 14px; color: var(--text-muted); line-height: 1.55;
+  }
+  .next-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(91,94,244,0.25); border: 1px solid rgba(91,94,244,0.4);
+    display: grid; place-items: center; font-size: 12px; font-weight: 700;
+    color: #a5b4fc; flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* ── Spacers ── */
+  .section { margin-bottom: 60px; }
+
+  /* ── Divider ── */
+  hr.glass-hr { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 56px 0; }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 99px; }
+</style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+</div>
+
+<div class="page">
+
+  <!-- ═══════════════════════════════════════════ HERO -->
+  <div class="glass hero">
+    <div class="hero-tag"><span class="dot-pulse"></span> CSG E2E Solution Navigator</div>
+    <h1>Scope Picker</h1>
+    <p class="hero-sub">
+      A self-contained browser tool that lets a solution architect take the master reference architecture and carve out a precise, project-specific scope — ready to land in BlueDolphin.
+    </p>
+    <div class="hero-badges">
+      <span class="badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        Single HTML file — no install needed
+      </span>
+      <span class="badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Fully file-driven — works offline
+      </span>
+      <span class="badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        3-step guided workflow
+      </span>
+      <span class="badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Designed to become a Navigator tab
+      </span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ POC NOTICE -->
+  <div class="status-banner">
+    <span class="sbi">⚠️</span>
+    <p>Scope Picker is currently a <strong>Proof of Concept (POC)</strong>. It works fully as a standalone tool. The final step — applying the scope back into BlueDolphin — has been built and tested with a dry-run, but has not yet been executed live against a real project. Always run a <strong>dry-run first</strong> before a live apply.</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ WHAT IT DOES -->
+  <div class="section">
+    <div class="section-label">01 — The Big Picture</div>
+    <h2>What problem does Scope Picker solve?</h2>
+    <p class="section-intro">
+      The master architecture in BlueDolphin covers everything — all products, all customer segments, all channels, all E2E use cases. For any given customer project, only a relevant slice of that master applies. Today, identifying and documenting that slice is manual and time-consuming. Scope Picker makes it structured, visual, and exportable in minutes.
+    </p>
+
+    <div class="grid-2">
+      <div class="glass glass-sm card">
+        <div class="card-icon" style="background:rgba(91,94,244,0.18);">🗺️</div>
+        <h3>Without Scope Picker</h3>
+        <ul>
+          <li>Manually browsing the master model to find relevant items</li>
+          <li>No structured way to record which E2E use cases apply</li>
+          <li>Requirements are mapped informally, often in spreadsheets</li>
+          <li>Gaps and missed coverage only discovered late</li>
+          <li>Re-creating objects in BlueDolphin for each project by hand</li>
+        </ul>
+      </div>
+      <div class="glass glass-sm card">
+        <div class="card-icon" style="background:rgba(16,185,129,0.18);">✅</div>
+        <h3>With Scope Picker</h3>
+        <ul>
+          <li>Guided 3-step flow — set context, map requirements, review</li>
+          <li>Upload your requirements file and map each one visually</li>
+          <li>Coverage gaps surfaced automatically with bar charts</li>
+          <li>Author brand-new objects (not in master) inline, in context</li>
+          <li>Export one file that drives the BlueDolphin setup automatically</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ DATA FLOW -->
+  <div class="section">
+    <div class="section-label">02 — Data Flow</div>
+    <h2>How information flows through the tool</h2>
+    <p class="section-intro">
+      Scope Picker sits between your master reference architecture and your project workspace in BlueDolphin. It reads two input files, lets you do the scoping work interactively, and produces one output file that drives the automation.
+    </p>
+
+    <div class="glass" style="overflow:hidden;">
+      <div class="io-flow">
+
+        <div class="io-node">
+          <div class="io-icon" style="background:rgba(6,182,212,0.18); font-size:26px;">📋</div>
+          <div class="io-label">e2e_data.json</div>
+          <div class="io-meta">Master reference<br>architecture model</div>
+        </div>
+
+        <div class="io-arrow">+</div>
+
+        <div class="io-node">
+          <div class="io-icon" style="background:rgba(6,182,212,0.18); font-size:26px;">📊</div>
+          <div class="io-label">Requirements.xlsx<br>/ .csv</div>
+          <div class="io-meta">Customer project<br>requirements</div>
+        </div>
+
+        <div class="io-arrow" style="font-size:28px;">→</div>
+
+        <div class="io-node" style="position:relative;">
+          <div class="io-icon" style="background:rgba(91,94,244,0.25); font-size:26px;">🌐</div>
+          <div class="io-label">scope_picker<br>.html</div>
+          <div class="io-meta">The tool — runs in<br>your browser</div>
+        </div>
+
+        <div class="io-arrow" style="font-size:28px;">→</div>
+
+        <div class="io-node">
+          <div class="io-icon" style="background:rgba(16,185,129,0.18); font-size:26px;">📄</div>
+          <div class="io-label">scope_instruction<br>.json</div>
+          <div class="io-meta">Scoping decision<br>export file</div>
+        </div>
+
+        <div class="io-arrow" style="font-size:28px;">→</div>
+
+        <div class="io-node">
+          <div class="io-icon" style="background:rgba(245,158,11,0.18); font-size:26px;">⚙️</div>
+          <div class="io-label">apply_scope.py</div>
+          <div class="io-meta">Automation that<br>writes to BlueDolphin</div>
+        </div>
+
+        <div class="io-arrow" style="font-size:28px;">→</div>
+
+        <div class="io-node">
+          <div class="io-icon" style="background:rgba(168,85,247,0.18); font-size:26px;">🐬</div>
+          <div class="io-label">BlueDolphin</div>
+          <div class="io-meta">Project workspace<br>populated &amp; ready</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ PRE-REQS -->
+  <div class="section">
+    <div class="section-label">03 — What You Need</div>
+    <h2>Pre-requisites</h2>
+    <p class="section-intro">
+      Two files and a browser are all you need to run the Scope Picker. The BlueDolphin step only comes later, once you are happy with the scope you have defined.
+    </p>
+
+    <div class="grid-3">
+      <div class="glass glass-sm card">
+        <div class="card-icon" style="background:rgba(6,182,212,0.18);">📦</div>
+        <h3>e2e_data.json</h3>
+        <p>The extended master model exported from BlueDolphin. Must include a <em>reference_data</em> block covering Product Categories, Customer Segments, Channels, and Application Components. This is extracted once using the <code style="color:#67e8f9;font-size:12px;">extract_e2e_data_v3.py</code> script.</p>
+      </div>
+      <div class="glass glass-sm card">
+        <div class="card-icon" style="background:rgba(6,182,212,0.18);">📊</div>
+        <h3>Requirements file</h3>
+        <p>Your customer's project requirements as an <strong>.xlsx</strong> or <strong>.csv</strong> file. The tool auto-detects the header row, the statement column, and any ID column. The current reference file has approximately <strong>1,463 requirements</strong>.</p>
+      </div>
+      <div class="glass glass-sm card">
+        <div class="card-icon" style="background:rgba(91,94,244,0.18);">🌐</div>
+        <h3>A modern browser</h3>
+        <p>Open <code style="color:#a5b4fc;font-size:12px;">scope_picker.html</code> directly in Chrome, Edge, or any modern browser. No server, no install, no login required. Everything runs locally on your machine.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ THE 3 STEPS -->
+  <div class="section">
+    <div class="section-label">04 — The Workflow</div>
+    <h2>Three steps to a scoped project</h2>
+    <p class="section-intro">
+      Every session follows the same guided flow. You can save your progress at any point and pick up where you left off.
+    </p>
+
+    <div class="steps-flow">
+
+      <!-- Step 1 -->
+      <div class="step-item">
+        <div class="step-left">
+          <div class="step-num-circle" style="background:linear-gradient(135deg,#5b5ef4,#818cf8);color:#fff;">1</div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-body">
+          <div class="glass glass-sm step-body-inner">
+            <div class="step-subtitle">Step 1</div>
+            <div class="step-title">Project Setup — Define the context</div>
+            <div class="step-desc">
+              Start by telling the tool <em>which slice of the master architecture applies to this customer</em>. You select from four shortlists that have been pre-populated from the master model. Your selections here become the constrained pick-lists you will use when mapping individual requirements in Step 2 — so accuracy matters.
+            </div>
+            <div class="step-desc">
+              For each dimension, you can also add items that do <strong>not yet exist in the master</strong> using the inline <strong>+ New</strong> button. These get a pink "NEW" badge and are automatically included in your scope.
+            </div>
+            <div class="tags">
+              <span class="tag tag-prod">🟠 Product Categories</span>
+              <span class="tag tag-seg">🩷 Customer Segments</span>
+              <span class="tag tag-chan">🔵 Channels</span>
+              <span class="tag tag-app">🩵 Application Components</span>
+              <span class="tag tag-new">✦ + New (for non-master items)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-item">
+        <div class="step-left">
+          <div class="step-num-circle" style="background:linear-gradient(135deg,#a855f7,#c084fc);color:#fff;">2</div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-body">
+          <div class="glass glass-sm step-body-inner">
+            <div class="step-subtitle">Step 2</div>
+            <div class="step-title">Requirements Mapping — Connect requirements to the architecture</div>
+            <div class="step-desc">
+              Upload your requirements file. The tool displays each requirement as a row in an editable grid. Click <strong>Map</strong> on any row to open a side drawer where you connect that requirement to the architecture:
+            </div>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+              <li style="display:flex;gap:10px;font-size:14px;color:var(--text-muted);line-height:1.55;">
+                <span style="color:#a5b4fc;font-weight:700;flex-shrink:0;">1.</span>
+                Tag the requirement with the applicable <strong>Channel, Product Category, Customer Segment</strong> and <strong>Application Component</strong> from your Step 1 shortlist.
+              </li>
+              <li style="display:flex;gap:10px;font-size:14px;color:var(--text-muted);line-height:1.55;">
+                <span style="color:#a5b4fc;font-weight:700;flex-shrink:0;">2.</span>
+                Select one or more <strong>E2E Use Cases</strong> that this requirement falls under.
+              </li>
+              <li style="display:flex;gap:10px;font-size:14px;color:var(--text-muted);line-height:1.55;">
+                <span style="color:#a5b4fc;font-weight:700;flex-shrink:0;">3.</span>
+                Under each E2E, tick the <strong>Business Services</strong> it touches — and whether they are <strong>Core</strong> (always needed) or <strong>Conditional</strong> (only in certain contexts).
+              </li>
+            </ul>
+            <div class="step-desc">
+              You can select multiple rows and <strong>bulk map</strong> them at once. You can also <strong>save your progress</strong> and reload it in a later session. And if a requirement points to something that does not exist in the master yet, you can author it right here in context — without leaving the drawer.
+            </div>
+            <div class="tags">
+              <span class="tag tag-core">🟢 Core Business Services</span>
+              <span class="tag tag-cond">🟡 Conditional Business Services</span>
+              <span class="tag tag-new">✦ Author new E2Es / Services inline</span>
+              <span class="tag tag-out">💾 Save &amp; resume supported</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-item">
+        <div class="step-left">
+          <div class="step-num-circle" style="background:linear-gradient(135deg,#06b6d4,#22d3ee);color:#fff;">3</div>
+          <div class="step-connector"></div>
+        </div>
+        <div class="step-body">
+          <div class="glass glass-sm step-body-inner">
+            <div class="step-subtitle">Step 3</div>
+            <div class="step-title">Review &amp; Generate — Verify, check coverage, export</div>
+            <div class="step-desc">
+              Three sub-tabs let you review your work from different angles before exporting.
+            </div>
+            <div class="subtabs">
+              <div class="subtab">
+                <div class="subtab-icon">🧭</div>
+                <h4>Scope Navigator</h4>
+                <p>A read-only walk of the scoped model — exactly as it will appear in BlueDolphin. Browse by Customer Journey (or Value Stream). Click an E2E to see its Business Services and the individual requirements mapped to each.</p>
+              </div>
+              <div class="subtab">
+                <div class="subtab-icon">📊</div>
+                <h4>Coverage Stats</h4>
+                <p>Bar charts showing how many items from each of your four shortlists (Products, Segments, Channels, App Components) are actually covered by requirements. Click any bar to drill into which E2Es and requirements cover it. Gaps are highlighted.</p>
+              </div>
+              <div class="subtab">
+                <div class="subtab-icon">⬇️</div>
+                <h4>Generate</h4>
+                <p>Validation checks catch any errors before you export. Review scorecards and project context. Then download the <strong>scope_instruction.json</strong> file — or preview it inline before saving.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ NEW OBJECTS -->
+  <div class="section">
+    <div class="section-label">05 — Authoring New Content</div>
+    <h2>What if something isn't in the master model yet?</h2>
+    <p class="section-intro">
+      Customer projects often have requirements that touch capabilities not yet defined in the master architecture. Scope Picker lets you author these new objects inline — without losing your context or switching to another tool. Everything you create gets tagged as "new" and will be created fresh in BlueDolphin when you apply.
+    </p>
+
+    <div class="author-grid">
+      <div class="author-card">
+        <h4>🟠 New reference items <span class="tag tag-new" style="font-size:11px;">NEW badge</span></h4>
+        <p>In Step 1, each pick card has a <strong>+ New</strong> button. Type a name, press enter — the item is added to your shortlist and automatically selected. Useful for project-specific Product Categories, Segments, Channels, or Application Components not in the master.</p>
+      </div>
+      <div class="author-card">
+        <h4>🔷 New E2E Use Case</h4>
+        <p>In the Step 2 mapping drawer, click <strong>+ Create new E2E Use Case</strong>. Fill in the full BOEM form: Title, Job To Be Done, Business Outcome, what the scope owns and what it doesn't, and a description. Assign it to a Value Stream and Customer Journey.</p>
+      </div>
+      <div class="author-card">
+        <h4>🟢 New Business Service</h4>
+        <p>Under any E2E in the drawer, click <strong>+ Add new Business Service</strong> with the full BOEM form. Set it as Core or Conditional and optionally add a condition note. You can also <strong>attach an existing</strong> Business Service from the master to a new E2E.</p>
+      </div>
+      <div class="author-card">
+        <h4>🔄 New Business Process variant</h4>
+        <p>Under any Business Service, add a process variant inline. Variants automatically <strong>inherit the Channel, Product, and Segment</strong> you tagged at the top of the drawer — so the context is never lost. The first process on a new service is always the base flow.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ OUTPUT -->
+  <div class="section">
+    <div class="section-label">06 — The Output</div>
+    <h2>What Scope Picker produces</h2>
+    <p class="section-intro">
+      The tool generates a single structured export file — <code style="color:#6ee7b7;font-size:15px;">scope_instruction.json</code> — that captures every decision you made. This file is the bridge between your scoping session and BlueDolphin.
+    </p>
+
+    <div class="glass output-block" style="margin-bottom:24px;">
+      <div class="output-title">📄 scope_instruction.json — what's inside</div>
+      <div class="output-rows">
+        <div class="output-row">
+          <div class="output-row-icon">🏷️</div>
+          <div>
+            <div class="output-row-label">Project details</div>
+            <div class="output-row-desc">Project name, prefix (used to name objects in BlueDolphin e.g. <em>[MyProject] Order Management</em>), and the source workspace to clone from.</div>
+          </div>
+        </div>
+        <div class="output-row">
+          <div class="output-row-icon">🗂️</div>
+          <div>
+            <div class="output-row-label">Scope — the selected architecture objects</div>
+            <div class="output-row-desc">The full list of E2E Use Cases, Business Services, Business Processes, and Application Services that were selected during mapping. Each object is tagged as either <strong>master</strong> (to be cloned) or <strong>new</strong> (to be created).</div>
+          </div>
+        </div>
+        <div class="output-row">
+          <div class="output-row-icon">📋</div>
+          <div>
+            <div class="output-row-label">Requirements</div>
+            <div class="output-row-desc">Every in-scope requirement with its full statement, ID, and all of its architecture mappings (which E2E, which Business Services, which Channel/Product/Segment).</div>
+          </div>
+        </div>
+        <div class="output-row">
+          <div class="output-row-icon">✦</div>
+          <div>
+            <div class="output-row-label">New objects block</div>
+            <div class="output-row-desc">All the objects you authored during the session that don't exist in the master — new reference items, new E2E Use Cases, new Business Services, and new Business Process variants — with all their details ready to be created in BlueDolphin.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="glass glass-sm card" style="background:rgba(245,158,11,0.07);border-color:rgba(245,158,11,0.20);">
+      <div class="card-icon" style="background:rgba(245,158,11,0.18);">⚙️</div>
+      <h3>What happens next — apply_scope.py</h3>
+      <p style="margin-bottom:12px;">The <code style="color:#fde68a;font-size:13px;">apply_scope.py</code> script reads the export file and writes everything into BlueDolphin automatically:</p>
+      <ul>
+        <li><strong>Master objects</strong> are cloned into your project workspace with the <em>[Project]</em> name prefix, carrying all their BOEM descriptions.</li>
+        <li><strong>New objects</strong> you authored are created from scratch.</li>
+        <li><strong>Relationships</strong> between all objects are recreated — but only within the project copies, never touching the master.</li>
+        <li><strong>Requirements</strong> become Requirement objects in BlueDolphin, linked to the E2E Use Cases and Business Services they were mapped to.</li>
+        <li>Running it again is <strong>safe</strong> — it will not create duplicates (it matches by name).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ FILES -->
+  <div class="section">
+    <div class="section-label">07 — Files &amp; Artefacts</div>
+    <h2>All the files involved</h2>
+    <p class="section-intro">
+      Here is every file that makes Scope Picker work — what each one is, and what role it plays.
+    </p>
+
+    <div class="files-grid">
+      <div class="file-card">
+        <div class="file-icon">🌐</div>
+        <div>
+          <div class="file-name">scope_picker.html</div>
+          <div class="file-desc">The tool itself. Open this in your browser. Contains all logic, styling, and interactivity — completely self-contained, no server needed.</div>
+          <span class="file-role role-tool">The tool</span>
+        </div>
+      </div>
+      <div class="file-card">
+        <div class="file-icon">📦</div>
+        <div>
+          <div class="file-name">e2e_data.json</div>
+          <div class="file-desc">The master reference architecture model exported from BlueDolphin. Must include the <em>reference_data</em> block. Loaded into the tool at the start of each session.</div>
+          <span class="file-role role-input">Input</span>
+        </div>
+      </div>
+      <div class="file-card">
+        <div class="file-icon">📊</div>
+        <div>
+          <div class="file-name">Requirements.xlsx / .csv</div>
+          <div class="file-desc">The customer's project requirements. Uploaded inside the tool in Step 2. The current reference file has ~1,463 requirements.</div>
+          <span class="file-role role-input">Input</span>
+        </div>
+      </div>
+      <div class="file-card">
+        <div class="file-icon">📄</div>
+        <div>
+          <div class="file-name">scope_instruction.json</div>
+          <div class="file-desc">The output export from the tool. Contains all scoping decisions, selected objects, requirements, and any new objects authored. This drives the BlueDolphin apply step.</div>
+          <span class="file-role role-output">Output</span>
+        </div>
+      </div>
+      <div class="file-card">
+        <div class="file-icon">⚙️</div>
+        <div>
+          <div class="file-name">apply_scope.py</div>
+          <div class="file-desc">Python script that reads scope_instruction.json and materialises everything into a BlueDolphin project workspace. Supports a safe <em>dry-run</em> mode before writing anything live.</div>
+          <span class="file-role role-apply">Applier</span>
+        </div>
+      </div>
+      <div class="file-card">
+        <div class="file-icon">🔍</div>
+        <div>
+          <div class="file-name">extract_e2e_data_v3.py</div>
+          <div class="file-desc">Script that extracts the master model from BlueDolphin and produces the e2e_data.json file used as input to the tool. Run this once (or when the master model is updated).</div>
+          <span class="file-role role-input">Extractor</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ NEXT STEPS -->
+  <div class="section">
+    <div class="section-label">08 — What's Next</div>
+    <h2>Open items &amp; planned improvements</h2>
+    <p class="section-intro">
+      The tool is functional and ready for use. These are the known open items and agreed next steps.
+    </p>
+
+    <ul class="next-list">
+      <li>
+        <span class="next-num">1</span>
+        <span>Run <code style="color:#fde68a;font-size:13px;">apply_scope.py --dry-run</code> against a small scope to confirm the "Requirement" object type name matches what is configured in BlueDolphin — then run a single-requirement live test before doing a full apply.</span>
+      </li>
+      <li>
+        <span class="next-num">2</span>
+        <span>Optionally include Application Components in the save/load progress feature and the Step 3 review panel for a more complete round-trip.</span>
+      </li>
+      <li>
+        <span class="next-num">3</span>
+        <span>Upgrade the Coverage Stats charts to <strong>ECharts</strong> for richer interactivity — the current charts are custom-built and functional, but ECharts would allow more advanced visualisations if needed.</span>
+      </li>
+      <li>
+        <span class="next-num">4</span>
+        <span>Application Service filtering (showing which Application Services sit under each Application Component) is deferred until the corresponding links exist in BlueDolphin.</span>
+      </li>
+      <li>
+        <span class="next-num">5</span>
+        <span>The tool is designed to eventually <strong>drop into the E2E Navigator as a new tab</strong>, eliminating the need to run it as a separate standalone file.</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ FOOTER -->
+  <div class="glass" style="padding:28px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;background:rgba(255,255,255,0.05);">
+    <div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:4px;">E2E Scope Studio · Scope Picker</div>
+      <div style="font-size:13px;color:var(--text-dim);">Part of the CSG E2E Solution Navigator · Handover updated 2026-06-05</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <span class="badge" style="font-size:12px;">POC — not yet run live</span>
+      <span class="badge" style="font-size:12px;">Master workspace: Import Test 01</span>
+    </div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
