@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E2E Project Scoping — Vision</title>
+<style>
+:root{
+  --bg:#050a18;--g:rgba(255,255,255,.055);--gb:rgba(255,255,255,.13);
+  --blur:blur(18px) saturate(160%);
+  --t1:rgba(255,255,255,.93);--t2:rgba(255,255,255,.58);--t3:rgba(255,255,255,.30);
+  --cyan:#00d4ff;--purple:#a78bfa;--green:#34d399;--orange:#fb923c;--rose:#f43f5e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t1);font-family:system-ui,-apple-system,sans-serif;height:100vh;overflow:hidden;display:flex;flex-direction:column}
+.orbs{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.orb{position:absolute;border-radius:50%;filter:blur(90px)}
+nav{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:8px 18px;background:rgba(5,10,24,.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--gb);flex-shrink:0}
+.dots{display:flex;gap:4px;align-items:center}
+.dot{width:7px;height:7px;border-radius:4px;background:var(--gb);cursor:pointer;transition:width .2s,background .2s}
+.dot.on{width:20px;background:var(--cyan)}
+button{padding:5px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--gb);font-family:inherit;transition:all .15s}
+.bg{background:transparent;color:var(--t2)}.bg:hover{background:var(--g);color:var(--t1)}
+.bp{background:var(--cyan);color:#050a18;border-color:var(--cyan)}.bp:hover{opacity:.85}
+.lbl{font-size:11px;color:var(--t3)}
+main{position:relative;z-index:1;flex:1;overflow-y:auto;padding:22px 26px}
+.slide{display:none}.slide.on{display:block}
+.gc{background:var(--g);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--gb);border-radius:12px;padding:16px}
+.mw{background:var(--g);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--gb);border-radius:10px;padding:12px}
+.mdots{display:flex;gap:4px;margin-bottom:8px}
+.md{width:8px;height:8px;border-radius:50%}
+.sh{font-size:22px;font-weight:700;color:var(--t1);margin-bottom:6px}
+.sub{font-size:13px;color:var(--t2);line-height:1.5;margin-bottom:16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+.stk{display:flex;flex-direction:column;gap:10px}
+.row{display:flex;align-items:center;gap:8px}
+.bdg{display:inline-flex;align-items:center;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.sep{width:100%;height:1px;background:var(--gb);margin:8px 0}
+.bul{display:flex;gap:8px;align-items:flex-start;margin-bottom:5px}
+.bi{color:var(--cyan);flex-shrink:0;line-height:20px}
+.bt{font-size:13px;color:var(--t2);line-height:1.6}
+.sdot{width:26px;height:26px;min-width:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px}
+.ptk{height:4px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden}
+.pfl{height:100%;border-radius:2px}
+table{width:100%;border-collapse:collapse}
+th,td{border:1px solid var(--gb);padding:7px 10px}
+th{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--t3)}
+td{font-size:12px;color:var(--t2)}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+.tx{overflow-x:auto}
+.mono{font-family:'Courier New',monospace}
+.tc{text-align:center}.tl{text-align:left}
+.f700{font-weight:700}.f600{font-weight:600}
+.c1{color:var(--t1)}.c2{color:var(--t2)}.c3{color:var(--t3)}
+.cc{color:var(--cyan)}.cg{color:var(--green)}.cp{color:var(--purple)}.co{color:var(--orange)}.cr{color:var(--rose)}
+.mb4{margin-bottom:4px}.mb6{margin-bottom:6px}.mb8{margin-bottom:8px}.mb10{margin-bottom:10px}.mb12{margin-bottom:12px}
+.mt4{margin-top:4px}.mt6{margin-top:6px}.mt8{margin-top:8px}.mt12{margin-top:12px}
+.db{display:block}.fl{display:flex}.flc{display:flex;flex-direction:column}.fla{align-items:flex-start}.flca{align-items:center}.fls{align-items:stretch}.f1{flex:1}.fs0{flex-shrink:0}
+.g-4{gap:4px}.g-6{gap:6px}.g-8{gap:8px}.g-10{gap:10px}.g-12{gap:12px}.g-14{gap:14px}.g-16{gap:16px}
+.fw{flex-wrap:wrap}.jc{justify-content:center}.jb{justify-content:space-between}
+.of{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+</style>
+</head>
+<body>
+<div class="orbs">
+  <div class="orb" style="width:600px;height:600px;background:rgba(0,212,255,.14);top:-200px;left:-200px"></div>
+  <div class="orb" style="width:500px;height:500px;background:rgba(167,139,250,.14);bottom:-150px;right:-150px"></div>
+  <div class="orb" style="width:280px;height:280px;background:rgba(52,211,153,.1);top:35%;right:15%;filter:blur(60px)"></div>
+  <div class="orb" style="width:200px;height:200px;background:rgba(251,146,60,.1);bottom:10%;left:25%;filter:blur(50px)"></div>
+</div>
+<nav>
+  <button class="bg" onclick="prev()">← Back</button>
+  <div class="dots" id="dots"></div>
+  <div class="row g-10"><span class="lbl" id="ctr">1 / 13</span><button class="bp" onclick="next()">Next →</button></div>
+</nav>
+<main id="main">
+
+<!-- 0 TITLE -->
+<div class="slide on" id="s0" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:480px;gap:20px;text-align:center;padding:0 48px">
+  <span class="bdg" style="background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.44);color:var(--cyan);font-size:10px;letter-spacing:.14em;text-transform:uppercase">CSG E2E Solution Architecture · Product Vision</span>
+  <h1 style="font-size:38px;font-weight:800;color:var(--t1);letter-spacing:-.02em;line-height:1.15">E2E Project Scoping</h1>
+  <p style="font-size:18px;color:var(--t2);max-width:520px;line-height:1.5">From Requirements to Customer Workshop — The Integrated Toolchain Vision</p>
+  <div class="fl fw g-10 jc mt4">
+    <span class="bdg" style="background:rgba(0,212,255,.18);border:1px solid rgba(0,212,255,.55);color:var(--cyan)">Spec-Sync</span>
+    <span class="bdg" style="background:rgba(52,211,153,.18);border:1px solid rgba(52,211,153,.55);color:var(--green)">E2E Scope Studio</span>
+    <span class="bdg" style="background:rgba(167,139,250,.18);border:1px solid rgba(167,139,250,.55);color:var(--purple)">BlueDolphin</span>
+    <span class="bdg" style="background:rgba(251,146,60,.18);border:1px solid rgba(251,146,60,.55);color:var(--orange)">E2E Solutions Navigator</span>
+  </div>
+  <div class="sep"></div>
+  <p style="font-size:12px;color:var(--t3)">A connected, automated pipeline that replaces spreadsheet-based scoping with an auditable, repeatable, customer-ready process</p>
+</div>
+
+<!-- 1 CHALLENGE -->
+<div class="slide stk g-16" id="s1">
+  <div><div class="sh">The Challenge</div><p class="sub">BSS transformation projects are large, complex, and high-stakes — yet the scoping process has stayed manual and fragmented.</p></div>
+  <div class="g2">
+    <div class="gc"><div class="fl g-8 flca mb4"><div style="width:5px;height:5px;border-radius:50%;background:var(--rose)"></div><span class="f700 c1" style="font-size:13px">Spreadsheet dependency</span></div><p style="font-size:12px;color:var(--t2);line-height:1.6;padding-left:13px">Scope driven by a massive, manually maintained Excel file — version-controlled by email, understood by few.</p></div>
+    <div class="gc"><div class="fl g-8 flca mb4"><div style="width:5px;height:5px;border-radius:50%;background:var(--rose)"></div><span class="f700 c1" style="font-size:13px">No requirements traceability</span></div><p style="font-size:12px;color:var(--t2);line-height:1.6;padding-left:13px">No structured link between customer requirements and the E2E architecture components being scoped.</p></div>
+    <div class="gc"><div class="fl g-8 flca mb4"><div style="width:5px;height:5px;border-radius:50%;background:var(--rose)"></div><span class="f700 c1" style="font-size:13px">Inconsistent outputs</span></div><p style="font-size:12px;color:var(--t2);line-height:1.6;padding-left:13px">Each architect produces different scope documents, making quality control and peer review impossible at scale.</p></div>
+    <div class="gc"><div class="fl g-8 flca mb4"><div style="width:5px;height:5px;border-radius:50%;background:var(--rose)"></div><span class="f700 c1" style="font-size:13px">Generic workshop materials</span></div><p style="font-size:12px;color:var(--t2);line-height:1.6;padding-left:13px">Customer workshops use generic architecture diagrams, not project-specific views — reducing engagement and accuracy.</p></div>
+    <div class="gc"><div class="fl g-8 flca mb4"><div style="width:5px;height:5px;border-radius:50%;background:var(--rose)"></div><span class="f700 c1" style="font-size:13px">Knowledge locked in individuals</span></div><p style="font-size:12px;color:var(--t2);line-height:1.6;padding-left:13px">Scope decisions live in architects' heads and email chains, not in a reusable, auditable system.</p></div>
+    <div class="gc"><div class="fl g-8 flca mb4"><div style="width:5px;height:5px;border-radius:50%;background:var(--rose)"></div><span class="f700 c1" style="font-size:13px">Slow iteration cycles</span></div><p style="font-size:12px;color:var(--t2);line-height:1.6;padding-left:13px">A single scope review cycle can take days of manual work, slowing pre-sales and delivery rhythm.</p></div>
+  </div>
+</div>
+
+<!-- 2 VISION -->
+<div class="slide stk g-18" id="s2">
+  <div><div class="sh">The Vision</div></div>
+  <div class="gc" style="border-color:rgba(0,212,255,.33);padding:20px 24px"><p style="font-size:16px;color:var(--t1);line-height:1.8;font-style:italic">"A connected, automated pipeline that transforms raw project requirements into customer-ready architectural views — accurately, consistently, and in hours rather than days."</p></div>
+  <div class="g4">
+    <div class="gc tc" style="border-color:rgba(0,212,255,.33)"><div style="font-size:24px;font-weight:800;color:var(--cyan)">01</div><div class="f700 c1" style="font-size:14px;margin:6px 0 4px">Capture</div><span class="bdg mb8 db" style="background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.44);color:var(--cyan);margin:4px auto 8px">Spec-Sync</span><p style="font-size:11px;color:var(--t2);line-height:1.6;margin-top:4px">Structure requirements with full traceability from day one</p></div>
+    <div class="gc tc" style="border-color:rgba(52,211,153,.33)"><div style="font-size:24px;font-weight:800;color:var(--green)">02</div><div class="f700 c1" style="font-size:14px;margin:6px 0 4px">Structure</div><span class="bdg mb8 db" style="background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.44);color:var(--green);margin:4px auto 8px">Scope Studio</span><p style="font-size:11px;color:var(--t2);line-height:1.6;margin-top:4px">Map requirements to E2E architecture with guided precision</p></div>
+    <div class="gc tc" style="border-color:rgba(167,139,250,.33)"><div style="font-size:24px;font-weight:800;color:var(--purple)">03</div><div class="f700 c1" style="font-size:14px;margin:6px 0 4px">Repository</div><span class="bdg mb8 db" style="background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.44);color:var(--purple);margin:4px auto 8px">BlueDolphin</span><p style="font-size:11px;color:var(--t2);line-height:1.6;margin-top:4px">Persist every project scope as a first-class architecture artifact</p></div>
+    <div class="gc tc" style="border-color:rgba(251,146,60,.33)"><div style="font-size:24px;font-weight:800;color:var(--orange)">04</div><div class="f700 c1" style="font-size:14px;margin:6px 0 4px">Visualize</div><span class="bdg mb8 db" style="background:rgba(251,146,60,.15);border:1px solid rgba(251,146,60,.44);color:var(--orange);margin:4px auto 8px">Navigator</span><p style="font-size:11px;color:var(--t2);line-height:1.6;margin-top:4px">Render project-specific views ready for customer workshops</p></div>
+  </div>
+  <div class="sep"></div><p style="font-size:13px;color:var(--t3);text-align:center">Any consultant · Any customer project · Consistent, high-quality, auditable scope output</p>
+</div>
+
+<!-- 3 TOOLCHAIN -->
+<div class="slide stk g-18" id="s3">
+  <div><div class="sh">The Integrated Toolchain</div><p class="sub">Four integrated tools forming an unbroken chain from requirements to customer workshop</p></div>
+  <div class="tx"><div class="fl fls g-0" style="min-width:700px">
+    <div class="gc flc g-8 fs0" style="width:165px;border-color:rgba(0,212,255,.44)"><span class="bdg" style="background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.55);color:var(--cyan)">Spec-Sync</span><p style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3)">Requirements Pipeline</p><p style="font-size:11px;color:var(--t2);line-height:1.6;flex:1">Syncs BDD scenarios from Azure DevOps / Jira. Assigns traceable IDs. Maintains requirement-to-architecture links.</p><div style="border-top:1px solid var(--gb);padding-top:8px"><p style="font-size:9px;color:var(--t3);margin-bottom:2px">OUTPUT</p><p style="font-size:10px;font-weight:600;color:var(--cyan)">requirements.xlsx / .csv</p></div></div>
+    <div class="fl flca jc fs0" style="width:32px;color:var(--cyan);font-size:16px;font-weight:700">→</div>
+    <div class="gc flc g-8 fs0" style="width:165px;border-color:rgba(52,211,153,.44)"><span class="bdg" style="background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.55);color:var(--green)">E2E Scope Studio</span><p style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3)">Scope Engine</p><p style="font-size:11px;color:var(--t2);line-height:1.6;flex:1">3-step browser tool. Maps requirements to E2E Use Cases, Business Services &amp; Process variants. Replaced the manual spreadsheet.</p><div style="border-top:1px solid var(--gb);padding-top:8px"><p style="font-size:9px;color:var(--t3);margin-bottom:2px">OUTPUT</p><p style="font-size:10px;font-weight:600;color:var(--green)">scope_instruction.json</p></div></div>
+    <div class="fl flca jc fs0" style="width:32px;color:var(--cyan);font-size:16px;font-weight:700">→</div>
+    <div class="gc flc g-8 fs0" style="width:165px;border-color:rgba(167,139,250,.44)"><span class="bdg" style="background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.55);color:var(--purple)">BlueDolphin</span><p style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3)">Architecture Repository</p><p style="font-size:11px;color:var(--t2);line-height:1.6;flex:1">BiZZdesign platform. Holds [MASTER] model. apply_scope.py clones scoped objects into a project workspace.</p><div style="border-top:1px solid var(--gb);padding-top:8px"><p style="font-size:9px;color:var(--t3);margin-bottom:2px">OUTPUT</p><p style="font-size:10px;font-weight:600;color:var(--purple)">[Project] workspace</p></div></div>
+    <div class="fl flca jc fs0" style="width:32px;color:var(--cyan);font-size:16px;font-weight:700">→</div>
+    <div class="gc flc g-8 fs0" style="width:165px;border-color:rgba(251,146,60,.44)"><span class="bdg" style="background:rgba(251,146,60,.15);border:1px solid rgba(251,146,60,.55);color:var(--orange)">E2E Solutions Navigator</span><p style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--t3)">Workshop Engine</p><p style="font-size:11px;color:var(--t2);line-height:1.6;flex:1">HTML tool reading BlueDolphin via OData. Renders project-scoped architecture interactively for customer workshops.</p><div style="border-top:1px solid var(--gb);padding-top:8px"><p style="font-size:9px;color:var(--t3);margin-bottom:2px">OUTPUT</p><p style="font-size:10px;font-weight:600;color:var(--orange)">Customer views</p></div></div>
+  </div></div>
+  <div class="gc" style="border-color:rgba(0,212,255,.22);padding:10px 16px"><p style="font-size:12px;color:var(--t2)">The master E2E architecture model lives in BlueDolphin and flows through every tool. Requirements enter at Spec-Sync and emerge as customer-ready architecture at the Navigator — with full traceability preserved end to end.</p></div>
+</div>
+
+<!-- 4 SPEC-SYNC -->
+<div class="slide stk g-14" id="s4">
+  <div class="fl g-10 flca"><div class="sh" style="margin:0">Spec-Sync</div><span class="bdg" style="background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.44);color:var(--cyan)">Tool 1 of 4 · Requirements Pipeline</span></div>
+  <div class="g2 g-14">
+    <div class="stk g-12">
+      <div class="gc"><h3 style="font-size:14px;font-weight:700;color:var(--t1);margin-bottom:10px">What it is</h3><div class="bul"><span class="bi">›</span><span class="bt">Industry-standard synchronization tool connecting BDD (Gherkin) feature files with Azure DevOps and Jira</span></div><div class="bul"><span class="bi">›</span><span class="bt">Creates and maintains Test Cases and Requirement work items directly from human-readable feature files</span></div><div class="bul"><span class="bi">›</span><span class="bt">Tag-based linking (@req:ID) ties each scenario to architecture and test work items</span></div></div>
+      <div class="gc"><h3 style="font-size:14px;font-weight:700;color:var(--t1);margin-bottom:10px">Role in scoping</h3><div class="bul"><span class="bi">›</span><span class="bt">Imports requirements into Azure DevOps / Jira as structured work items with stable IDs</span></div><div class="bul"><span class="bi">›</span><span class="bt">Ensures every requirement is traceable before entering the scoping pipeline</span></div><div class="bul"><span class="bi">›</span><span class="bt">Produces the XLSX / CSV that Scope Studio ingests in Step 2</span></div><div class="bul"><span class="bi">›</span><span class="bt">Runs per module / domain — separate config per functional area</span></div></div>
+    </div>
+    <div class="stk g-10">
+      <div class="mw">
+        <div class="mdots"><div class="md" style="background:var(--rose)"></div><div class="md" style="background:var(--orange)"></div><div class="md" style="background:var(--green)"></div><span style="font-size:9px;color:var(--t3);margin-left:6px">requirements.feature</span></div>
+        <div class="fl g-8 fls">
+          <div class="gc f1 mono" style="padding:8px 10px;border-color:rgba(0,212,255,.33);font-size:10px;line-height:1.7"><p style="font-size:8px;color:var(--t3);margin-bottom:4px">BDD FEATURE FILE</p><span style="color:var(--cyan)">@req:L2O-001 @scope:core</span><br><span style="color:var(--t3)">Scenario: Customer discovers</span><br><span style="color:var(--green)">  Given a B2B portal session</span><br><span style="color:var(--green)">  When they browse catalog</span><br><span style="color:var(--orange)">  Then products are shown</span></div>
+          <div class="flc flca jc g-4 fs0"><span style="color:var(--cyan);font-size:14px">⇄</span><div class="gc" style="padding:2px 6px;border-color:rgba(0,212,255,.44)"><span style="color:var(--cyan);font-size:8px;font-weight:700">SpecSync</span></div></div>
+          <div class="gc f1 mono" style="padding:8px 10px;border-color:rgba(52,211,153,.33);font-size:10px;line-height:1.8"><p style="font-size:8px;color:var(--t3);margin-bottom:4px">AZURE DEVOPS</p><span style="color:var(--green)">✓ #1001</span> <span style="color:var(--t2)">L2O-001</span><br><span style="color:var(--green)">✓ #1002</span> <span style="color:var(--t2)">P2C-001</span><br><span style="color:var(--green)">✓ #1003</span> <span style="color:var(--t2)">U2I-006</span><br><span style="color:var(--t3)">○ #1004</span> <span style="color:var(--t3)">L2O-007</span><br><span style="color:var(--t3)">○ #1005</span> <span style="color:var(--t3)">P2C-011</span></div>
+        </div>
+      </div>
+      <div class="g2 g-8">
+        <div class="gc" style="border-color:rgba(0,212,255,.33);padding:10px"><span class="bdg" style="background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.44);color:var(--cyan)">In</span><p style="font-size:11px;color:var(--t2);margin-top:5px;line-height:1.5">Gherkin / BDD feature files or authored requirement statements</p></div>
+        <div class="gc" style="border-color:rgba(52,211,153,.33);padding:10px"><span class="bdg" style="background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.44);color:var(--green)">Out</span><p style="font-size:11px;color:var(--t2);margin-top:5px;line-height:1.5">Structured requirements (XLSX/CSV) with stable IDs and traceability tags</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 5 SCOPE STUDIO -->
+<div class="slide stk g-14" id="s5">
+  <div class="fl g-10 flca"><div class="sh" style="margin:0">E2E Scope Studio</div><span class="bdg" style="background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.44);color:var(--green)">Tool 2 of 4 · Scope Engine</span></div>
+  <div class="gc" style="padding:6px 12px;border-color:rgba(52,211,153,.33)"><p style="font-size:12px;color:var(--t2)">Browser-based, no installation required · Replaces a massive manual Excel spreadsheet · Single-file HTML application</p></div>
+  <div class="g2 g-14">
+    <div class="stk g-10">
+      <div class="gc fl g-10 fla" style="border-color:rgba(0,212,255,.44)"><div class="sdot" style="background:rgba(0,212,255,.22);border:1px solid rgba(0,212,255,.55);color:var(--cyan)">1</div><div><div class="f700 c1" style="font-size:13px;margin-bottom:3px">Project Context</div><p style="font-size:12px;color:var(--t2);line-height:1.5">Load master BlueDolphin model. Select products, customer segments, channels, and application components.</p></div></div>
+      <div class="gc fl g-10 fla" style="border-color:rgba(52,211,153,.44)"><div class="sdot" style="background:rgba(52,211,153,.22);border:1px solid rgba(52,211,153,.55);color:var(--green)">2</div><div><div class="f700 c1" style="font-size:13px;margin-bottom:3px">Requirements Mapping</div><p style="font-size:12px;color:var(--t2);line-height:1.5">Upload requirements from Spec-Sync (XLSX/CSV). Map each to E2E Use Cases, Business Services, and Process variants.</p></div></div>
+      <div class="gc fl g-10 fla" style="border-color:rgba(251,146,60,.44)"><div class="sdot" style="background:rgba(251,146,60,.22);border:1px solid rgba(251,146,60,.55);color:var(--orange)">3</div><div><div class="f700 c1" style="font-size:13px;margin-bottom:3px">Review &amp; Generate</div><p style="font-size:12px;color:var(--t2);line-height:1.5">Review coverage stats and gaps. Validate completeness. Export scope_instruction.json for BlueDolphin.</p></div></div>
+    </div>
+    <div class="stk g-10">
+      <div class="mw">
+        <div class="mdots"><div class="md" style="background:var(--rose)"></div><div class="md" style="background:var(--orange)"></div><div class="md" style="background:var(--green)"></div><span style="font-size:9px;color:var(--t3);margin-left:6px">scope_picker.html</span></div>
+        <div class="fl g-4 mb10">
+          <div style="flex:1;padding:3px 6px;text-align:center;border-radius:6px;font-size:10px;background:rgba(0,212,255,.11);border:1px solid rgba(0,212,255,.44);color:var(--cyan)">1 Context ✓</div>
+          <div style="flex:1;padding:3px 6px;text-align:center;border-radius:6px;font-size:10px;font-weight:700;background:rgba(52,211,153,.22);border:1px solid rgba(52,211,153,.66);color:var(--green)">2 Mapping ●</div>
+          <div style="flex:1;padding:3px 6px;text-align:center;border-radius:6px;font-size:10px;background:transparent;border:1px solid var(--gb);color:var(--t3)">3 Review</div>
+        </div>
+        <div class="fl g-4 mb6"><span style="font-size:9px;color:var(--t3);width:52px">REQ ID</span><span style="font-size:9px;color:var(--t3);flex:1">Statement</span><span style="font-size:9px;color:var(--t3);width:50px;text-align:right">E2E UC</span></div>
+        <div class="fl g-4 flca mb4"><span class="mono" style="font-size:9px;color:var(--cyan);width:52px">REQ-001</span><span style="font-size:10px;color:var(--t2);flex:1" class="of">Customer discovers products</span><span style="padding:1px 5px;border-radius:4px;background:rgba(52,211,153,.22);border:1px solid rgba(52,211,153,.44);font-size:9px;color:var(--green);font-weight:700">L2O-1</span></div>
+        <div class="fl g-4 flca mb4"><span class="mono" style="font-size:9px;color:var(--cyan);width:52px">REQ-002</span><span style="font-size:10px;color:var(--t2);flex:1" class="of">Credit check at onboarding</span><span style="padding:1px 5px;border-radius:4px;background:rgba(52,211,153,.22);border:1px solid rgba(52,211,153,.44);font-size:9px;color:var(--green);font-weight:700">L2O-7</span></div>
+        <div class="fl g-4 flca mb4"><span class="mono" style="font-size:9px;color:var(--cyan);width:52px">REQ-003</span><span style="font-size:10px;color:var(--t2);flex:1" class="of">Process customer payment</span><span style="padding:1px 5px;border-radius:4px;background:rgba(52,211,153,.22);border:1px solid rgba(52,211,153,.44);font-size:9px;color:var(--green);font-weight:700">P2C-1</span></div>
+        <div class="mt8"><div class="fl jb mb4"><span style="font-size:9px;color:var(--t3)">Coverage</span><span style="font-size:9px;color:var(--green);font-weight:700">87%</span></div><div class="ptk"><div class="pfl" style="width:87%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div></div>
+      </div>
+      <div class="gc" style="padding:12px"><p class="f700 cg" style="font-size:12px;margin-bottom:4px">Key output: scope_instruction.json</p><p style="font-size:12px;color:var(--t2);line-height:1.5">Structured export of all scoped E2E Use Cases, Business Services, Business Processes, requirements mappings, and project context — ready for BlueDolphin materialization.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 6 BLUEDOLPHIN -->
+<div class="slide stk g-14" id="s6">
+  <div class="fl g-10 flca"><div class="sh" style="margin:0">BlueDolphin</div><span class="bdg" style="background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.44);color:var(--purple)">Tool 3 of 4 · Architecture Repository</span></div>
+  <p style="font-size:14px;color:var(--t2)">Single source of truth for the E2E architecture — master model and all project-specific scoped views</p>
+  <div class="g2 g-14">
+    <div class="stk g-10">
+      <div class="gc"><h3 style="font-size:14px;font-weight:700;color:var(--t1);margin-bottom:10px">What BlueDolphin provides</h3><div class="bul"><span class="bi">›</span><span class="bt">Enterprise architecture platform by BiZZdesign — purpose-built for managing architecture at scale</span></div><div class="bul"><span class="bi">›</span><span class="bt">Stores the [MASTER] workspace with all E2E Use Cases, Business Services, and Business Processes</span></div><div class="bul"><span class="bi">›</span><span class="bt">Each project gets its own [ProjectName]-prefixed workspace with cloned, scoped objects</span></div><div class="bul"><span class="bi">›</span><span class="bt">Requirements linked to architecture via Realization relations</span></div><div class="bul"><span class="bi">›</span><span class="bt">OData REST API lets Scope Studio extract master data and Navigator read project scopes</span></div></div>
+      <div class="gc"><h3 style="font-size:14px;font-weight:700;color:var(--t1);margin-bottom:10px">Key scripts</h3><div class="gc mb6" style="padding:8px 10px;border-color:rgba(167,139,250,.33)"><p class="f700 cp mono" style="font-size:11px;margin-bottom:2px">extract_e2e_data_v3.py</p><p style="font-size:11px;color:var(--t2)">Pulls full master model via OData → e2e_data.json for Scope Studio</p></div><div class="gc" style="padding:8px 10px;border-color:rgba(167,139,250,.33)"><p class="f700 cp mono" style="font-size:11px;margin-bottom:2px">apply_scope.py</p><p style="font-size:11px;color:var(--t2)">Reads scope_instruction.json, calls BlueDolphin REST API, clones objects into project workspace</p></div></div>
+    </div>
+    <div class="mw">
+      <div class="mdots"><div class="md" style="background:var(--rose)"></div><div class="md" style="background:var(--orange)"></div><div class="md" style="background:var(--green)"></div><span style="font-size:9px;color:var(--t3);margin-left:6px">BlueDolphin · Architecture Workspaces</span></div>
+      <div class="fl g-8 fla">
+        <div class="gc f1" style="padding:10px;border-color:rgba(167,139,250,.44)"><div class="fl g-6 flca mb8"><div style="width:8px;height:8px;border-radius:2px;background:var(--purple)"></div><span class="f700 cp" style="font-size:10px">[MASTER]</span></div><div class="mono" style="font-size:9px;line-height:1.7"><div class="fl jb"><span class="c2">▾ L2O</span><span class="c3">12 BUCs</span></div><div class="fl jb"><span class="c3">  ├ L2O-1</span><span class="c3">Discover</span></div><div class="fl jb"><span class="c3">  └ L2O-7</span><span class="c3">Credit</span></div><div class="fl jb"><span class="c2">▾ P2C</span><span class="c3">21 BUCs</span></div><div class="fl jb"><span class="c3">  ├ P2C-1</span><span class="c3">Payments</span></div><div class="fl jb"><span class="c3">  └ P2C-11</span><span class="c3">Refunds</span></div></div></div>
+        <div class="flc flca jc g-4 fs0" style="padding-top:30px"><span style="color:var(--cyan);font-size:14px">→</span><span style="color:var(--t3);font-size:8px;text-align:center;max-width:50px">apply_scope.py</span></div>
+        <div class="gc f1" style="padding:10px;border-color:rgba(52,211,153,.44)"><div class="fl g-6 flca mb8"><div style="width:8px;height:8px;border-radius:2px;background:var(--green)"></div><span class="f700 cg" style="font-size:10px">[MobilyB2B]</span></div><div class="mono" style="font-size:9px;line-height:1.7"><div class="fl jb"><span class="c2">▾ L2O</span><span class="c3">3 scoped</span></div><div class="fl jb"><span class="c3">  ├ L2O-1</span><span class="cg">✓</span></div><div class="fl jb"><span class="c3">  └ L2O-7</span><span class="cg">✓</span></div><div class="fl jb"><span class="c2">▾ P2C</span><span class="c3">7 scoped</span></div><div class="fl jb"><span class="c3">  ├ P2C-1</span><span class="cg">✓</span></div><div class="fl jb"><span class="c3">  └ P2C-11</span><span class="cg">✓</span></div></div></div>
+      </div>
+      <div class="fl g-6 flca mt8"><div style="width:5px;height:5px;border-radius:50%;background:var(--cyan);flex-shrink:0"></div><p style="font-size:9px;color:var(--t3)">OData REST API · Requirements linked via Realization relations · Navigator reads project workspace</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- 7 NAVIGATOR -->
+<div class="slide stk g-14" id="s7">
+  <div class="fl g-10 flca"><div class="sh" style="margin:0">E2E Solutions Navigator</div><span class="bdg" style="background:rgba(251,146,60,.15);border:1px solid rgba(251,146,60,.44);color:var(--orange)">Tool 4 of 4 · Workshop Engine</span></div>
+  <p style="font-size:14px;color:var(--t2)">HTML-based · Reads BlueDolphin via OData · Customer workshop-ready · Designed to become the unified front-end for the entire toolchain</p>
+  <div class="g2 g-14">
+    <div class="stk g-10">
+      <div class="gc"><h3 style="font-size:14px;font-weight:700;color:var(--t1);margin-bottom:10px">What the Navigator does</h3><div class="bul"><span class="bi">›</span><span class="bt">Connects to BlueDolphin via OData API to retrieve the project-scoped workspace</span></div><div class="bul"><span class="bi">›</span><span class="bt">Renders scoped architecture in an interactive, clean HTML interface</span></div><div class="bul"><span class="bi">›</span><span class="bt">Enables consultants to walk customers through their specific project scope — not generic diagrams</span></div><div class="bul"><span class="bi">›</span><span class="bt">Accessible to non-technical stakeholders — navigable, self-explanatory</span></div><div class="bul"><span class="bi">›</span><span class="bt">Planned: Scope Studio embedded as a tab within Navigator for a unified experience</span></div></div>
+      <div class="gc"><h3 style="font-size:14px;font-weight:700;color:var(--t1);margin-bottom:10px">Customer workshop value</h3><div class="mb8"><div class="f700 co" style="font-size:12px">Project-specific</div><div style="font-size:12px;color:var(--t2)">Shows only what is scoped — not the full CSG product universe</div></div><div class="mb8"><div class="f700 cc" style="font-size:12px">Interactive</div><div style="font-size:12px;color:var(--t2)">Stakeholders drill into any Use Case and see Business Services, variants, and linked requirements</div></div><div class="mb8"><div class="f700 cg" style="font-size:12px">Living document</div><div style="font-size:12px;color:var(--t2)">Rerun apply_scope.py → Navigator reflects changes immediately</div></div></div>
+    </div>
+    <div class="mw">
+      <div class="mdots"><div class="md" style="background:var(--rose)"></div><div class="md" style="background:var(--orange)"></div><div class="md" style="background:var(--green)"></div><span style="font-size:9px;color:var(--t3);margin-left:6px">e2e_navigator.html</span></div>
+      <div class="fl g-8">
+        <div class="gc fs0" style="width:130px;padding:10px;border-color:rgba(251,146,60,.33)"><p style="font-size:8px;color:var(--t3);font-weight:700;letter-spacing:.08em;margin-bottom:6px">PROJECT SCOPE</p><div class="mono" style="font-size:9px;line-height:1.9"><div class="c2">▾ Lead-to-Order</div><div style="color:var(--orange);background:rgba(251,146,60,.15);padding:0 3px;border-radius:3px">  L2O-1 ●</div><div class="c3">  L2O-7</div><div class="c2">▾ Pay-to-Collect</div><div class="c3">  P2C-1</div><div class="c3">  P2C-11</div><div class="c2">▾ Usage-to-Invoice</div><div class="c3">  U2I-1</div></div></div>
+        <div class="flc f1 g-6">
+          <div class="gc" style="padding:10px;border-color:rgba(251,146,60,.44)"><p class="f700 co" style="font-size:11px;margin-bottom:4px">L2O-1: Discover Products &amp; Services</p><p style="font-size:9px;color:var(--t3)">JTBD: When a customer wants to explore available products...</p></div>
+          <div class="gc" style="padding:10px"><p style="font-size:8px;color:var(--t3);font-weight:700;letter-spacing:.08em;margin-bottom:4px">BUSINESS SERVICES</p><div class="fl jb mb4"><span style="font-size:10px;color:var(--t2)">● Product Discovery</span><span style="padding:0 5px;border-radius:4px;background:rgba(52,211,153,.22);border:1px solid rgba(52,211,153,.44);font-size:8px;color:var(--green)">Core</span></div><div class="fl jb"><span style="font-size:10px;color:var(--t2)">● Campaign Context</span><span style="padding:0 5px;border-radius:4px;background:rgba(251,146,60,.22);border:1px solid rgba(251,146,60,.44);font-size:8px;color:var(--orange)">Conditional</span></div></div>
+          <div class="gc" style="padding:6px 10px;border-color:rgba(52,211,153,.33)"><p style="font-size:9px;color:var(--t3)">12 reqs mapped · Government + Enterprise variants</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 8 E2E PROCESS -->
+<div class="slide stk g-14" id="s8">
+  <div><div class="sh">End-to-End Process</div><p class="sub">Nine steps from project kickoff to customer workshop — with clear tool ownership at every stage</p></div>
+  <div class="stk g-6" id="steps"></div>
+</div>
+
+<!-- 9 RACI -->
+<div class="slide stk g-14" id="s9">
+  <div><div class="sh">Roles &amp; Responsibilities</div></div>
+  <div class="g2 g-8">
+    <div class="gc" style="border-color:rgba(0,212,255,.44);padding:10px"><span class="bdg" style="background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.44);color:var(--cyan)">E2E Business Consultant</span><p style="font-size:11px;color:var(--t2);margin-top:5px;line-height:1.5">Customer-facing consultant who leads requirements discovery, captures business needs, facilitates scope workshops, and acts as the primary customer liaison throughout the process.</p></div>
+    <div class="gc" style="border-color:rgba(52,211,153,.44);padding:10px"><span class="bdg" style="background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.44);color:var(--green)">Solution Architect</span><p style="font-size:11px;color:var(--t2);margin-top:5px;line-height:1.5">Technical architect responsible for mapping requirements to E2E architecture in Scope Studio, configuring tool integrations, validating architectural completeness, and owning the scope_instruction.json output.</p></div>
+  </div>
+  <div class="fl g-14 fw">
+    <div class="fl g-6 flca"><div style="width:22px;height:22px;border-radius:4px;background:rgba(34,197,94,.22);border:1px solid rgba(34,197,94,.66);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#22c55e">R</div><span style="font-size:11px;color:var(--t2)">Responsible — does the work</span></div>
+    <div class="fl g-6 flca"><div style="width:22px;height:22px;border-radius:4px;background:rgba(234,179,8,.22);border:1px solid rgba(234,179,8,.66);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#eab308">A</div><span style="font-size:11px;color:var(--t2)">Accountable — owns the outcome</span></div>
+    <div class="fl g-6 flca"><div style="width:22px;height:22px;border-radius:4px;background:rgba(96,165,250,.22);border:1px solid rgba(96,165,250,.66);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#60a5fa">C</div><span style="font-size:11px;color:var(--t2)">Consulted — provides input</span></div>
+    <div class="fl g-6 flca"><div style="width:22px;height:22px;border-radius:4px;background:rgba(255,255,255,.06);border:1px solid var(--gb);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:var(--t3)">I</div><span style="font-size:11px;color:var(--t2)">Informed — kept updated</span></div>
+  </div>
+  <div class="tx"><table id="raci-tbl" style="min-width:650px"></table></div>
+</div>
+
+<!-- 10 WHO BENEFITS -->
+<div class="slide stk g-16" id="s10">
+  <div><div class="sh">Who Benefits &amp; How</div></div>
+  <div class="g2 g-12">
+    <div class="gc"><span class="bdg" style="background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.44);color:var(--cyan)">E2E Business Consultant</span><div class="stk g-5 mt10"><div class="fl g-8"><span style="color:var(--cyan);font-weight:700">+</span><p style="font-size:12px;color:var(--t2);line-height:1.5">Structured requirements capture — requirements linked and trackable from day one</p></div><div class="fl g-8"><span style="color:var(--cyan);font-weight:700">+</span><p style="font-size:12px;color:var(--t2);line-height:1.5">Customer workshops backed by live, project-specific Navigator views instead of generic slides</p></div><div class="fl g-8"><span style="color:var(--cyan);font-weight:700">+</span><p style="font-size:12px;color:var(--t2);line-height:1.5">Clear scope boundary conversations enabled by interactive tooling</p></div></div></div>
+    <div class="gc"><span class="bdg" style="background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.44);color:var(--green)">Solution Architect</span><div class="stk g-5 mt10"><div class="fl g-8"><span style="color:var(--green);font-weight:700">+</span><p style="font-size:12px;color:var(--t2);line-height:1.5">No more manual spreadsheet — guided 3-step Scope Studio workflow</p></div><div class="fl g-8"><span style="color:var(--green);font-weight:700">+</span><p style="font-size:12px;color:var(--t2);line-height:1.5">Requirements automatically linked to architecture — traceability is built in</p></div><div class="fl g-8"><span style="color:var(--green);font-weight:700">+</span><p style="font-size:12px;color:var(--t2);line-height:1.5">Coverage statistics surface mapping gaps before customer reviews</p></div></div></div>
+    <div class="gc"><span class="bdg" style="background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.44);color:var(--purple)">Practice Lead / CoE</span><div class="stk g-5 mt10"><div class="fl g-8"><span style="color:var(--purple);font-weight:700">+</span><p style="font-size:12px;color:var(--t2);line-height:1.5">Standardized methodology enforced through the toolchain</p></div><div class="fl g-8"><span style="color:var(--purple);font-weight:700">+</span><p style="font-size:12px;color:var(--t2);line-height:1.5">Quality gate built in: Step 3 coverage validation before scope is exported</p></div><div class="fl g-8"><span style="color:var(--purple);font-weight:700">+</span><p style="font-size:12px;color:var(--t2);line-height:1.5">All scope decisions auditable and version-controlled in BlueDolphin</p></div></div></div>
+    <div class="gc"><span class="bdg" style="background:rgba(251,146,60,.15);border:1px solid rgba(251,146,60,.44);color:var(--orange)">Customer / Client Stakeholders</span><div class="stk g-5 mt10"><div class="fl g-8"><span style="color:var(--orange);font-weight:700">+</span><p style="font-size:12px;color:var(--t2);line-height:1.5">Workshop views show only what is relevant to their project</p></div><div class="fl g-8"><span style="color:var(--orange);font-weight:700">+</span><p style="font-size:12px;color:var(--t2);line-height:1.5">Requirements explicitly linked to architecture — no ambiguity about scope</p></div><div class="fl g-8"><span style="color:var(--orange);font-weight:700">+</span><p style="font-size:12px;color:var(--t2);line-height:1.5">Live interactive tool demonstrates CSG's depth of preparation</p></div></div></div>
+  </div>
+</div>
+
+<!-- 11 NOW VS VISION -->
+<div class="slide stk g-16" id="s11">
+  <div><div class="sh">Current State vs The Vision</div></div>
+  <table><thead><tr style="background:rgba(255,255,255,.04)"><th style="text-align:left;width:22%">Dimension</th><th style="text-align:left;width:39%;color:var(--rose)">Today (Current State)</th><th style="text-align:left;width:39%;color:var(--green)">Vision (Future State)</th></tr></thead><tbody>
+    <tr><td class="c1 f600">Scope definition</td><td class="c3">Large manual Excel spreadsheet — complex, version-controlled by email</td><td class="c2">E2E Scope Studio — structured 3-step browser tool, shareable, auditable</td></tr>
+    <tr><td class="c1 f600">Requirements traceability</td><td class="c3">None — requirements and architecture are separate documents</td><td class="c2">Every requirement linked to E2E Use Cases and Business Services</td></tr>
+    <tr><td class="c1 f600">Architecture repository</td><td class="c3">Static diagrams — each project creates its own from scratch</td><td class="c2">BlueDolphin as single source of truth — master model cloned per project</td></tr>
+    <tr><td class="c1 f600">Customer workshops</td><td class="c3">Generic PowerPoint diagrams — not project-specific</td><td class="c2">E2E Solutions Navigator — live, interactive, project-specific views</td></tr>
+    <tr><td class="c1 f600">Time to scope output</td><td class="c3">Days to weeks of manual effort per project</td><td class="c2">Hours — guided workflow with automation across all tools</td></tr>
+    <tr><td class="c1 f600">Knowledge portability</td><td class="c3">Locked in individuals and email threads</td><td class="c2">Captured in Scope Studio files, BlueDolphin workspaces, Navigator views</td></tr>
+    <tr><td class="c1 f600">Scope iteration speed</td><td class="c3">Each change requires updating multiple documents manually</td><td class="c2">Rerun apply_scope.py → Navigator reflects changes immediately</td></tr>
+    <tr><td class="c1 f600">BPMN process flows</td><td class="c3">Produced separately, if at all</td><td class="c2">Auto-generated for scoped BUCs as .bpmn and .drawio files</td></tr>
+  </tbody></table>
+</div>
+
+<!-- 12 JOURNEY -->
+<div class="slide stk g-16" id="s12">
+  <div><div class="sh">The Journey Ahead</div><p class="sub">Where we are today and what needs to happen to realize the full vision</p></div>
+  <div class="g2 g-14">
+    <div class="gc">
+      <h3 style="font-size:14px;font-weight:700;color:var(--t1);margin-bottom:12px">Component Status</h3>
+      <div class="stk g-7">
+        <div class="gc fl g-8 fla" style="padding:8px 10px;border-color:rgba(52,211,153,.33)"><div style="padding:1px 6px;border-radius:6px;background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.44);color:var(--green);font-size:9px;font-weight:700;flex-shrink:0">BUILT</div><div><p class="f600 c1 mono" style="font-size:12px;margin-bottom:2px">E2E Scope Studio (HTML)</p><p style="font-size:11px;color:var(--t2)">Full 3-step workflow, scope_instruction.json export, BPMN generation</p></div></div>
+        <div class="gc fl g-8 fla" style="padding:8px 10px;border-color:rgba(52,211,153,.33)"><div style="padding:1px 6px;border-radius:6px;background:rgba(52,211,153,.15);border:1px solid rgba(52,211,153,.44);color:var(--green);font-size:9px;font-weight:700;flex-shrink:0">BUILT</div><div><p class="f600 c1 mono" style="font-size:12px;margin-bottom:2px">E2E Solutions Navigator (HTML)</p><p style="font-size:11px;color:var(--t2)">BlueDolphin OData reader, customer workshop-ready interactive views</p></div></div>
+        <div class="gc fl g-8 fla" style="padding:8px 10px;border-color:rgba(0,212,255,.33)"><div style="padding:1px 6px;border-radius:6px;background:rgba(0,212,255,.15);border:1px solid rgba(0,212,255,.44);color:var(--cyan);font-size:9px;font-weight:700;flex-shrink:0">READY</div><div><p class="f600 c1 mono" style="font-size:12px;margin-bottom:2px">extract_e2e_data_v3.py</p><p style="font-size:11px;color:var(--t2)">Script complete — needs one production run against live BlueDolphin master</p></div></div>
+        <div class="gc fl g-8 fla" style="padding:8px 10px;border-color:rgba(251,146,60,.33)"><div style="padding:1px 6px;border-radius:6px;background:rgba(251,146,60,.15);border:1px solid rgba(251,146,60,.44);color:var(--orange);font-size:9px;font-weight:700;flex-shrink:0">DEFINED</div><div><p class="f600 c1 mono" style="font-size:12px;margin-bottom:2px">apply_scope.py</p><p style="font-size:11px;color:var(--t2)">Architecture fully documented in HANDOVER.md — implementation pending</p></div></div>
+        <div class="gc fl g-8 fla" style="padding:8px 10px;border-color:rgba(251,146,60,.33)"><div style="padding:1px 6px;border-radius:6px;background:rgba(251,146,60,.15);border:1px solid rgba(251,146,60,.44);color:var(--orange);font-size:9px;font-weight:700;flex-shrink:0">PLANNED</div><div><p class="f600 c1 mono" style="font-size:12px;margin-bottom:2px">Navigator ← Scope Studio tab</p><p style="font-size:11px;color:var(--t2)">Scope Studio to be embedded inside Navigator for a unified UX</p></div></div>
+      </div>
+    </div>
+    <div class="gc">
+      <h3 style="font-size:14px;font-weight:700;color:var(--t1);margin-bottom:12px">Immediate next steps</h3>
+      <div class="stk g-8">
+        <div class="fl g-10 fla"><div class="sdot" style="background:rgba(0,212,255,.22);border:1px solid rgba(0,212,255,.55);color:var(--cyan)">1</div><p style="font-size:12px;color:var(--t2);line-height:1.6">Run extract_e2e_data_v3.py against live BlueDolphin master to produce production e2e_data.json</p></div>
+        <div class="fl g-10 fla"><div class="sdot" style="background:rgba(0,212,255,.22);border:1px solid rgba(0,212,255,.55);color:var(--cyan)">2</div><p style="font-size:12px;color:var(--t2);line-height:1.6">Implement apply_scope.py using the HANDOVER.md API spec — test against Import Test 01 workspace</p></div>
+        <div class="fl g-10 fla"><div class="sdot" style="background:rgba(0,212,255,.22);border:1px solid rgba(0,212,255,.55);color:var(--cyan)">3</div><p style="font-size:12px;color:var(--t2);line-height:1.6">Run first end-to-end pilot: Spec-Sync → Scope Studio → BlueDolphin → Navigator on a real project</p></div>
+        <div class="fl g-10 fla"><div class="sdot" style="background:rgba(0,212,255,.22);border:1px solid rgba(0,212,255,.55);color:var(--cyan)">4</div><p style="font-size:12px;color:var(--t2);line-height:1.6">Embed Scope Studio as a new tab in the Navigator for a unified user experience</p></div>
+        <div class="fl g-10 fla"><div class="sdot" style="background:rgba(0,212,255,.22);border:1px solid rgba(0,212,255,.55);color:var(--cyan)">5</div><p style="font-size:12px;color:var(--t2);line-height:1.6">Knowledge transfer and onboarding session for the Solution Architecture community</p></div>
+        <div class="fl g-10 fla"><div class="sdot" style="background:rgba(0,212,255,.22);border:1px solid rgba(0,212,255,.55);color:var(--cyan)">6</div><p style="font-size:12px;color:var(--t2);line-height:1.6">Iterate on pilot feedback — refine UI, error handling, and BPMN variant generation</p></div>
+      </div>
+      <div class="sep mt12"></div>
+      <div class="gc" style="padding:10px 12px;border-color:rgba(0,212,255,.22);margin-top:4px"><p style="font-size:12px;color:var(--t2);line-height:1.6">The full vision is achievable with focused effort on apply_scope.py and the Spec-Sync pipeline activation. All other components are built and ready.</p></div>
+    </div>
+  </div>
+</div>
+
+</main>
+<script>
+const TOTAL=13,SLIDES=Array.from({length:TOTAL},(_,i)=>document.getElementById(`s${i}`));
+let cur=0;
+const dotsEl=document.getElementById('dots');
+for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=()=>go(i);dotsEl.appendChild(d);}
+function go(n){SLIDES.forEach((s,i)=>s.classList.toggle('on',i===n));document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===n));document.getElementById('ctr').textContent=`${n+1} / ${TOTAL}`;document.getElementById('main').scrollTop=0;cur=n;}
+function prev(){if(cur>0)go(cur-1);}
+function next(){if(cur<TOTAL-1)go(cur+1);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown')next();if(e.key==='ArrowLeft'||e.key==='ArrowUp')prev();});
+
+// Build E2E process steps
+const PROCS=[
+  ['rgba(0,212,255,.22)','rgba(0,212,255,.55)','#00d4ff','Spec-Sync','rgba(0,212,255,.15)','rgba(0,212,255,.44)','Requirements captured &amp; synced','Requirements collected in Azure DevOps / Jira from BDD feature files or manual authoring','Raw requirements','Structured work items with stable IDs'],
+  ['rgba(0,212,255,.22)','rgba(0,212,255,.55)','#00d4ff','Spec-Sync','rgba(0,212,255,.15)','rgba(0,212,255,.44)','Requirements exported for Scope Studio','Export as XLSX or CSV from Azure DevOps / Jira for Scope Studio import','Azure DevOps / Jira work items','requirements.xlsx / .csv'],
+  ['rgba(52,211,153,.22)','rgba(52,211,153,.55)','#34d399','Scope Studio','rgba(52,211,153,.15)','rgba(52,211,153,.44)','Step 1 — Project context defined','Load e2e_data.json from BlueDolphin. Select products, segments, channels, application components','e2e_data.json','Project context &amp; shortlists'],
+  ['rgba(52,211,153,.22)','rgba(52,211,153,.55)','#34d399','Scope Studio','rgba(52,211,153,.15)','rgba(52,211,153,.44)','Step 2 — Requirements mapped','Each requirement linked to E2E Use Cases, Business Services, and Business Process variants','requirements.xlsx + master model','Requirement-to-architecture mappings'],
+  ['rgba(52,211,153,.22)','rgba(52,211,153,.55)','#34d399','Scope Studio','rgba(52,211,153,.15)','rgba(52,211,153,.44)','Step 3 — Scope reviewed &amp; exported','Coverage reviewed, gaps identified, validation complete. Export scope_instruction.json','Completed mappings','scope_instruction.json'],
+  ['rgba(167,139,250,.22)','rgba(167,139,250,.55)','#a78bfa','BlueDolphin','rgba(167,139,250,.15)','rgba(167,139,250,.44)','Scope materialized in BlueDolphin','apply_scope.py calls BlueDolphin API, clones master objects with project prefix, links requirements','scope_instruction.json','[Project] workspace in BlueDolphin'],
+  ['rgba(251,146,60,.22)','rgba(251,146,60,.55)','#fb923c','Navigator','rgba(251,146,60,.15)','rgba(251,146,60,.44)','Navigator views prepared','E2E Business Consultant opens Navigator, verifies scope, builds workshop agenda','[Project] workspace (OData)','Navigator views ready'],
+  ['rgba(251,146,60,.22)','rgba(251,146,60,.55)','#fb923c','Navigator','rgba(251,146,60,.15)','rgba(251,146,60,.44)','Customer workshop conducted','Consultant walks customer through scoped architecture using Navigator — interactive, project-specific','Navigator views','Agreed scope, customer alignment'],
+  ['rgba(255,255,255,.08)','rgba(255,255,255,.2)','rgba(255,255,255,.3)','All tools','rgba(255,255,255,.05)','rgba(255,255,255,.15)','Scope iteration &amp; refinement','Update mappings in Scope Studio, re-apply to BlueDolphin, Navigator refreshes automatically','Workshop feedback','Updated scope, refreshed Navigator'],
+];
+const stepsEl=document.getElementById('steps');
+PROCS.forEach(([bg,brd,c,tool,tbg,tbrd,title,desc,inp,out],i)=>{
+  stepsEl.innerHTML+=`<div style="display:flex;gap:10px;align-items:flex-start;padding:8px 10px;background:var(--g);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--gb);border-radius:12px;border-color:${brd}33"><div style="width:26px;height:26px;min-width:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;background:${bg};border:1px solid ${brd};color:${c}">${i+1}</div><div style="flex:1"><div style="display:flex;gap:6px;align-items:center;margin-bottom:2px"><span style="display:inline-flex;align-items:center;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;background:${tbg};border:1px solid ${tbrd};color:${c}">${tool}</span><span style="font-weight:600;font-size:12px;color:var(--t1)">${title}</span></div><p style="font-size:11px;color:var(--t2)">${desc}</p><div style="display:flex;gap:16px;margin-top:2px"><span style="font-size:10px;color:var(--t3)">In: ${inp}</span><span style="font-size:10px;color:var(--t3)">Out: ${out}</span></div></div></div>`;
+});
+
+// Build RACI
+const RS=[['ss','Requirements sync &amp; export'],['sc','Load master model'],['sc','Step 1 — Project context'],['sc','Step 2 — Requirements mapping'],['sc','Step 3 — Review &amp; generate'],['bd','Apply scope to BlueDolphin'],['nv','Prepare Navigator views'],['nv','Customer workshop']];
+const RC={'ss':'#00d4ff','sc':'#34d399','bd':'#a78bfa','nv':'#fb923c'};
+const RD=[['R','C','C','A','I','I','R'],['C','R','I','A','I','—','C'],['C','R','C','A','C','C','I'],['R','R','I','A','C','C','I'],['C','R','C','A','C','I','I'],['I','A','I','A','I','—','R'],['C','R','C','A','I','—','C'],['R','C','R','A','A','R','I']];
+const RVC={'R':'#22c55e','A':'#eab308','C':'#60a5fa','I':'rgba(255,255,255,.3)','—':'rgba(255,255,255,.2)'};
+const RHEAD=['E2E Business\nConsultant','Solution\nArchitect','Pre-Sales\n/ BD','Practice\nLead','Proj\nMgr','Customer','Tool\nAdmin'];
+let rh=`<thead><tr style="background:rgba(255,255,255,.04)"><th style="text-align:left;min-width:200px">Process Step</th>`;
+RHEAD.forEach(r=>rh+=`<th style="text-align:center;white-space:pre-wrap;min-width:62px">${r}</th>`);
+rh+='</tr></thead><tbody>';
+RS.forEach(([tk,step],si)=>{
+  const c=RC[tk];
+  let row=`<tr style="background:${si%2===0?'transparent':'rgba(255,255,255,.02)'}"><td style="padding:7px 10px"><div style="display:flex;gap:6px;align-items:center"><div style="width:5px;height:5px;border-radius:50%;background:${c};flex-shrink:0"></div><span style="font-size:11px;color:var(--t2)">${step}</span></div></td>`;
+  RD[si].forEach(v=>row+=`<td style="text-align:center;font-weight:${v!=='—'&&v!=='I'?700:400};color:${RVC[v]||'var(--t3)'};font-size:13px">${v}</td>`);
+  rh+=row+'</tr>';
+});
+document.getElementById('raci-tbl').innerHTML=rh+'</tbody>';
+</script>
+</body>
+</html>
